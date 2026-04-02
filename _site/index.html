@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每天一个小好奇</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #FAFAF8;
+      --text-primary: #1A1A1A;
+      --text-secondary: #6B6B6B;
+      --accent: #E85D4C;
+      --card-bg: #FFFFFF;
+      --border: #EEEEEE;
+    }
+    body {
+      font-family: 'Noto Serif SC', serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 24px;
+    }
+    .logo {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-top: 48px;
+      margin-bottom: 48px;
+    }
+    .container { max-width: 720px; width: 100%; }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+      overflow: hidden;
+    }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      display: block;
+    }
+    .content { padding: 48px; }
+    @media (max-width: 600px) { .content { padding: 28px 24px; } }
+    .date {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .divider-line { width: 48px; height: 1px; background: var(--border); }
+    .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 600px) { .title { font-size: 22px; } }
+    .subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .body-text {
+      font-size: 17px;
+      text-align: justify;
+    }
+    .body-text p { margin-bottom: 20px; }
+    .body-text p:last-child { margin-bottom: 0; }
+    .body-text strong, .body-text b { color: var(--accent); font-weight: 600; }
+    .body-text ul, .body-text ol { margin: 16px 0; padding-left: 24px; }
+    .body-text li { margin-bottom: 8px; }
+    .body-text a { color: var(--accent); text-decoration: underline; }
+    .footer {
+      margin-top: 48px;
+      margin-bottom: 64px;
+      text-align: center;
+    }
+    .nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+    .nav-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .nav-btn:hover:not(.disabled) {
+      background: var(--text-primary);
+      color: var(--bg);
+      border-color: var(--text-primary);
+    }
+    .nav-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+    .shuffle-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 14px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 200ms ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .shuffle-btn:hover {
+      background: var(--text-primary);
+      color: var(--bg);
+      border-color: var(--text-primary);
+    }
+    .today-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: white;
+      background: var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .credit {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      color: #C0C0C0;
+      margin-top: 24px;
+      letter-spacing: 0.5px;
+    }
+    .fade-out { opacity: 0; transform: translateY(-10px); transition: all 300ms ease; }
+  </style>
+</head>
+<body>
+  <div class="logo">好奇</div>
+  <div class="container">
+    
+
+<div class="card">
+  <img id="card-img" class="card-img" src="../../images/2026-01/2026-01-01.jpg" alt="今日好奇">
+  <div class="content">
+    <div id="date" class="date"></div>
+    <div class="divider">
+      <span class="divider-line"></span>
+      <span class="divider-dot"></span>
+      <span class="divider-line"></span>
+    </div>
+    <h1 id="title" class="title"></h1>
+    <div id="subtitle" class="subtitle"></div>
+    <div id="body-text" class="body-text"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="nav">
+    <a id="prev-btn" class="nav-btn" href="#" onclick="goToPrev(); return false;">← 前一天</a>
+    <a id="next-btn" class="nav-btn" href="#" onclick="goToNext(); return false;">后一天 →</a>
+  </div>
+  <button class="shuffle-btn" onclick="shuffleCuriosity()"><span>↻</span> 换一换</button>
+  <div class="credit">每日更新 · 让知识成为一种习惯</div>
+</div>
+
+<script>
+const curiositiesDB = [
+  
+  { date: "2026-01-01", title: "为何清华的名字是 Tsinghua？", subtitle: "一个音译的百年故事", image: "../../images/2026-01/2026-01-01.jpg", body: "<p>「清华」这个名字背后藏着一个有趣的语言学故事。当清华大学在 1911 年成立时，它的英文名被定为 <strong>Tsinghua</strong>，而非直接用拼音的 Qinghua。</p>\n<p>这是因为在清末民初时期，威妥玛拼音（Wade-Giles system）是当时西方世界通用的中文罗马化方案。在这套系统中，「清」被拼写为 <strong>Ts'ing</strong>（用 apostrophe 区分送气音），后来逐渐演变成 <strong>Tsing</strong>。</p>\n<p>有趣的是，<strong>Tsinghua</strong> 这个拼写在英语世界已经约定俗成，以至于即使汉语拼音早已成为国际标准，清华大学至今仍保留了这个「老式「英文名——它已经成为了一个文化符号，见证着中国高等教育与西方交流的百年历程。</p>\n" },
+  
+  { date: "2026-01-02", title: "为什么番茄酱曾经是药？", subtitle: "从药房到餐桌的奇怪旅程", image: "../../images/2026-01/2026-01-02.jpg", body: "<p>很难想象，如今我们在薯条旁边大快朵颐的番茄酱，一度被认为是能够治疗消化不良、腹泻甚至抑郁症的「神奇药物」。</p>\n<p>1834 年，美国医生 John Cook Bennett 声称番茄具有惊人的药用价值，并开始推广一种「番茄酱药膏」。虽然这个特定产品很快消失，但番茄酱在接下来的几十年里仍然以「健康补品」的身份销售。</p>\n<p>直到 19 世纪末，食品加工技术改进后，番茄酱才开始转型为我们今天熟知的调味品。如今的番茄酱已经和医学没有任何关系，但它偶尔还会在美国一些奇怪的法律中被定义为「蔬菜」而非调味品——比如 1893 年的关税法案。</p>\n" },
+  
+  { date: "2026-01-03", title: "北极熊的皮肤其实是黑色的", subtitle: "白色毛发的隐藏秘密", image: "../../images/2026-01/2026-01-03.jpg", body: "<p>北极熊看起来雪白洁净，但如果你有机会近距离观察——尤其是看它的鼻子和脚掌——你会发现它的皮肤其实是 <strong>深黑色的</strong>。</p>\n<p>那它的毛发为什么是白色的呢？答案在于 <strong>空心结构</strong>。北极熊的毛发并非直接着色，而是半透明的空心管状结构。这些管道在特定光线下会产生散射，看起来就像白色。</p>\n<p>更有趣的是，北极熊的毛发在显微镜下其实是 <strong>透明的</strong>，内部充满空气。这种结构不仅能反射可见光，还能吸收红外线热量，同时在游泳时提供浮力。进化论的精妙设计，尽在这一身「白毛」之中。</p>\n" },
+  
+  { date: "2026-01-04", title: "「狼狈为奸」的狼，其实从未存在过", subtitle: "一个来自蒲松龄的文学误解", image: "../../images/2026-01/2026-01-04.jpg", body: "<p>「狼狈为奸」是一个我们经常使用的成语，用来形容两个坏人互相勾结做坏事。但这里有个问题——<strong>狈</strong> 这个动物，在自然界中从未被发现过。</p>\n<p>关于狈的记载，最早出现在唐代段成式的《酉阳杂俎》中：「或言狼狈是两物，狈前足绝短，每行常驾于狼腿上，狈无狼则不能行。「也就是说，狈被描述为一种前腿极短、必须趴在狼身上的动物。</p>\n<p>大多数动物学家认为，「狈」很可能只是狼群中因受伤或先天畸形而前腿发育不全的个体。古人看到这样的狼背着它的同伴，便创造出了「狈」这个物种。蒲松龄在《聊斋志异》中也写过狈的故事，进一步巩固了它的文化存在感。</p>\n" },
+  
+  { date: "2026-01-05", title: "企鹅的膝盖藏在羽毛下面", subtitle: "鸟类身体结构的意外事实", image: "../../images/2026-01/2026-01-05.jpg", body: "<p>企鹅走路时摇摇晃晃，看起来好像膝盖直接连着大腿。但实际上，企鹅不仅有膝盖，而且它们的膝盖结构与人类非常相似，只是 <strong>完全隐藏在羽毛下面</strong>。</p>\n<p>企鹅的腿由大腿、膝盖、小腿和脚组成，膝盖关节藏在厚厚的羽毛和脂肪层之下。这让它们在陆地上显得笨拙，但在水中却灵活无比。</p>\n<p>更有趣的是，企鹅的膝盖实际上是 <strong>向后弯曲的</strong>——和人类一样。只是因为羽毛的遮挡，加上企鹅站立时身体前倾，我们看到的弯曲方向似乎是相反的。下次去动物园，不妨仔细观察企鹅蹲下时的姿势，那时你就能「看到」它们的膝盖了。</p>\n" },
+  
+  { date: "2026-01-06", title: "莫扎特其实不会弹钢琴", subtitle: "被神话遮蔽的真实技艺", image: "../../images/2026-01/2026-01-06.jpg", body: "<p>关于莫扎特，我们听过太多「天才」故事——他五岁作曲、能在闭眼情况下演奏复杂作品。但历史学家发现，现实中的莫扎特其实是一位 <strong>并不出色的钢琴演奏家</strong>。</p>\n<p>莫扎特本人曾多次抱怨钢琴演奏让他感到焦虑和痛苦。他的父亲利奥波德在信中提到，莫扎特的钢琴技术「从不是最好的」。与他同时代的钢琴家如克莱门蒂（Clementi）和图尔特（Stewart）都曾在技巧上超越他。</p>\n<p>莫扎特的伟大之处在于他的 <strong>作曲能力</strong>——他能将旋律、和声与结构完美融合，创造出令人心碎的音乐。但将这样的大脑称为「钢琴演奏天才」，其实是对他真正天赋的一种误解。</p>\n" },
+  
+  { date: "2026-01-07", title: "「床「字在古代其实不是睡觉用的", subtitle: "汉字家具史的趣味变迁", image: "../../images/2026-01/2026-01-07.jpg", body: "<p>今天我们理解的「床」是睡觉的家具，但在古代中国，「床」的概念完全不同。在唐宋时期，<strong>床</strong> 主要指的是一种 <strong>坐具</strong>，类似于今天的沙发或罗汉床。</p>\n<p>杜甫的名句「床前明月光」引发过无数讨论。其实这里的「床」指的是厅堂中摆放的坐具，而非卧具——诗人应该是坐在院子里赏月，而非躺在床上。</p>\n<p>古代人睡觉用的是 <strong>「榻」</strong> 或 <strong>「衾」</strong>（被子）。「榻」通常狭窄，只能躺一人，所以我们现在还有「下榻」这个词语，意思是住宿、落脚。这个汉字的语义变迁，正好反映了中国人起居方式的历史演变。</p>\n" },
+  
+  { date: "2026-01-08", title: "章鱼有三颗心脏和蓝色的血", subtitle: "深海软体动物的奇异身体", image: "../../images/2026-01/2026-01-08.jpg", body: "<p>章鱼是地球上最奇特的生物之一。它们拥有 <strong>三颗心脏</strong>、<strong>蓝色血液</strong>，以及能够独立于大脑运作的触手——每条触手都有自己的「小脑子」。</p>\n<p>章鱼的两颗心脏负责将血液泵向鳃部进行氧气交换，第三颗心脏则负责将氧合血液泵往全身。当章鱼在水中游泳时，第三颗心脏会停止跳动，这也是为什么它们更喜欢爬行而非游泳。</p>\n<p>至于蓝色的血液，是因为章鱼使用 <strong>血蓝蛋白</strong>（hemocyanin）来运输氧气，而不是哺乳动物使用的血红蛋白。血蓝蛋白在携带氧气时呈现蓝色。科学家认为，这种物质在低温、低氧的深海环境中比血红蛋白更高效。</p>\n" },
+  
+  { date: "2026-01-09", title: "「我现在忙「用英文说是 「I am busy「 吗？", subtitle: "语言学家说这是个陷阱", image: "../../images/2026-01/2026-01-09.jpg", body: "<p>很多英语学习者会自然地说 <strong>「I am busy「</strong> 来表示「我现在很忙」，但语言学家指出，这个表达在英语母语者听来其实有点奇怪。</p>\n<p>问题在于 <strong>「I am busy「</strong> 是一个静态陈述，它描述的是你 <strong>是</strong> 一个忙碌的人，而不是你此刻正在忙于做什么。更自然的表达应该是：</p>\n<ul>\n<li><strong>「I'm tied up「</strong>（我被占用了）</li>\n<li><strong>「I'm in the middle of something「</strong>（我正在做某事）</li>\n<li><strong>「I have my hands full「</strong>（我应接不暇）</li>\n</ul>\n<p>这些表达更动态、更口语化，也更符合英语母语者的思维模式。下次想说「我很忙」时，试试 「I'm a bit tied up at the moment「——地道得多。</p>\n" },
+  
+  { date: "2026-01-10", title: "金字塔的建造者不是奴隶，而是领工资的工人", subtitle: "考古发现改写历史认知", image: "../../images/2026-01/2026-01-10.jpg", body: "<p>好莱坞电影里，金字塔总是由绝望的奴隶在鞭子下建造。但 1990 年的一次意外考古发现，彻底改变了我们对金字塔建造者的认知。</p>\n<p>当年，埃及古物学家在吉萨大金字塔附近发现了一座工人墓地。墓中的骨骼显示，这些人生前曾接受过医疗救治——有些骨头有愈合痕迹，说明他们受伤后得到了照顾。这对奴隶来说是不可能的，因为他们不被视为值得医疗的人类。</p>\n<p>更直接的证据来自 2013 年发现的 <strong>蒲草纸文献</strong>——这是世界上现存最古老的工资单。文献记载，工匠们按团队组织，每十天轮换一次，他们领到的报酬包括 <strong>啤酒和面包</strong>。他们是专业的、技术娴熟的工人，而非奴隶。</p>\n" },
+  
+  { date: "2026-01-11", title: "为何啤酒瓶都是绿色的？", subtitle: "从玻璃工艺到品牌心理", image: "../../images/2026-01/2026-01-11.jpg", body: "<p>大多数啤酒瓶都是绿色的，这个传统源自 17 世纪的玻璃制造工艺。早期的玻璃因为原料中含有铁杂质，呈现出天然的绿色。棕色玻璃反而更贵，因为它需要额外的矿物来着色。</p>\n<p>后来，科学家发现 <strong>光线会破坏啤酒中的啤酒花</strong> 产生一种叫「臭鼬味「（skunky）的异味。棕色玻璃能有效阻挡紫外线，于是啤酒商开始转向棕色瓶。但喜啤（Heineken）等品牌坚持绿色瓶，意外地成为了身份象征。</p>\n<p>有趣的是，现在很多精酿啤酒反而故意用透明或绿色瓶来展示其「天然「品质——哪怕这意味着啤酒更容易变质。这大概是设计的胜利，而非理性的选择。</p>\n" },
+  
+  { date: "2026-01-12", title: "「风水「的英文为什么是 Feng Shui？", subtitle: "一个音译如何征服英语世界", image: "../../images/2026-01/2026-01-12.jpg", body: "<p>「Feng Shui「 是极少数被英语完全接受的汉语拼音词之一。但为什么这个词能进入英语，而其他中文概念需要意译？</p>\n<p>答案在于 <strong>无法翻译</strong>。「风水「的核心概念——气（生命能量）、阴阳平衡、空间与人的关系——在西方文化中没有对应词汇。任何意译都会失去太多内涵，于是译者选择保留原音。</p>\n<p>类似的例子还有 「kowtow「（叩头）、「tofu「（豆腐）等。但 「Feng Shui「 特别之处在于它在 1970 年代西方「东方热潮「中的大规模传播——那时候家家户户都想在自己的房子里「摆放下风水「。</p>\n" },
+  
+  { date: "2026-01-13", title: "鸭嘴兽是哺乳动物却会下蛋", subtitle: "进化论最奇怪的妥协", image: "../../images/2026-01/2026-01-13.jpg", body: "<p>鸭嘴兽大概是地球上最奇怪的哺乳动物：它有鸭子的嘴、海狸的尾巴、水獭的脚，而且 <strong>它会下蛋</strong>。当 1799 年英国科学家第一次看到鸭嘴兽标本时，他们以为是有人在恶作剧——把鸭子嘴缝在了河狸身上。</p>\n<p>从进化角度看，鸭嘴兽属于 <strong>单孔目</strong>（Monotremes），是哺乳动物中最原始的一支。它们保留了祖先的卵生特征，同时又具备哺乳动物的乳汁分泌——尽管它们没有乳头，乳汁直接从腹部皮肤渗出。</p>\n<p>更有趣的是，鸭嘴兽还有 <strong>电感应能力</strong>——它们在水底觅食时，靠感知猎物的电场来定位。这是哺乳动物中极其罕见的技能，鲨鱼和某些鱼类才具备。</p>\n" },
+  
+  { date: "2026-01-14", title: "为什么咖啡闻起来比喝起来更香？", subtitle: "嗅觉与味觉的奇妙关系", image: "../../images/2026-01/2026-01-14.jpg", body: "<p>你有没有觉得咖啡的香味比实际品尝时更诱人？这种感觉其实有科学解释。</p>\n<p>我们感知味道是 <strong>嗅觉</strong> 和 <strong>味觉</strong> 共同作用的结果。当你闻咖啡时，挥发性的芳香分子直接进入鼻腔嗅觉区。但在喝咖啡时，这些分子被唾液稀释，只有部分能到达嗅觉区。</p>\n<p>更重要的是，当我们喝热咖啡时，舌头先感受到的是苦味和酸味——这些强烈的味觉信号会压制嗅觉信号。大脑在处理「这是什么味道「时，主要依赖嗅觉，所以闻起来丰富，喝起来却感觉简单。</p>\n" },
+  
+  { date: "2026-01-15", title: "「北京时间「其实不在北京", subtitle: "中国时区背后的地理知识", image: "../../images/2026-01/2026-01-15.jpg", body: "<p>「北京时间「这个名字可能会让人误以为时间是从北京发出的。但实际上，中国的标准时间是从位于陕西的 <strong>中国科学院国家授时中心</strong> 发播的。</p>\n<p>北京位于东经 116.4°，其真太阳时比「北京时间「提前约 14 分钟。而中国幅员辽阔，最西端在新疆帕米尔高原（东经 73°），最东端在黑龙江与乌苏里江汇合处（东经 135°），跨越了五个地理时区。</p>\n<p>为了统一管理，中国从 1949 年起采用单一的 <strong>东八区</strong> 时间（UTC+8），覆盖全国。这意味着新疆的居民在夏天晚上十一点还能看到太阳——而他们用的时间和北京居民完全一样。</p>\n" },
+  
+  { date: "2026-03-23", title: "猫尝不到甜味", subtitle: "喵星人的味觉秘密", image: "../../images/2026-03/2026-03-23.jpg", body: "<p>猫是天然的肉食动物，它们的味觉受体基因与人类有很大差异。科学研究发现，猫的 <strong>Tas1r2</strong> 基因——负责感知甜味的受体——发生了突变，导致它们无法尝出甜味。</p>\n<p>所以，当你看到猫对你的蛋糕无动于衷时，并不是它们「懂事「，而是它们压根儿就尝不出甜是什么味道。有趣的是，猫反而对 <strong>酸味和苦味</strong> 异常敏感，这帮助它们在野外识别腐败或不安全的食物。</p>\n<p>更有意思的是，猫虽然尝不出甜味，但它们对 <strong>氨基酸</strong>（肉类的味道）却极度敏感——这大概是喵星人骨子里对肉执念的终极解释。</p>\n" },
+  
+  { date: "2026-03-24", title: "埃克森·瓦尔迪兹号漏油事件", subtitle: "1989年的海洋生态灾难", image: "../../images/2026-03/2026-03-24.jpg", body: "<p>1989年3月24日，埃克森·瓦尔迪兹号（Exxon Valdez）油轮在阿拉斯加威廉王子海峡触礁，约 <strong>1100万加仑</strong> 的原油泄漏入海。这是当时美国历史上最严重的石油泄漏事故。</p>\n<p>泄漏的原油形成了宽约80公里、长约160公里的油污带，覆盖了约1900公里的海岸线。受影响的海域生态系统遭到严重破坏：超过25万只海鸟、数千只海獭和数百头海豹死亡。</p>\n<p>讽刺的是，这艘油轮的名字「瓦尔迪兹「来自一个西班牙语词汇，意为「小海湾「——如今它成了环境灾难的代名词。事后调查显示，船长在事发前曾饮用大量酒精饮料，这一疏忽最终酿成了这场生态悲剧。</p>\n" },
+  
+  { date: "2026-03-25", title: "《罗马条约》与欧盟的诞生", subtitle: "欧洲一体化的起点", image: "../../images/2026-03/2026-03-25.jpg", body: "<p>1957年3月25日，法国、西德、意大利、比利时、荷兰和卢森堡六国在罗马签署了《罗马条约》，正式宣告 <strong>欧洲经济共同体（EEC）</strong> 成立——这正是今天 <strong>欧盟（EU）</strong> 的前身。</p>\n<p>条约的核心目标是消除成员国之间的关税壁垒，建立共同市场，让煤炭、钢铁等战略资源自由流通。六位创始签署国希望，借由经济一体化彻底终结两次世界大战的悲剧，让欧洲大陆从此不再有战。</p>\n<p>有意思的是，条约签署地是罗马的 <strong>卡皮托利尼山</strong>——古罗马神话中朱庇特神庙的所在地。选择这里签署，象征着六国对「和平与繁荣新城「的共同期许。如今，欧盟已发展为27个成员国的庞大联盟，而「罗马「这个名字，始终是欧洲一体化的精神图腾。</p>\n" },
+  
+  { date: "2026-03-26", title: "孟加拉国独立日", subtitle: "1971年南亚次大陆的历史转折", image: "../../images/2026-03/2026-03-26.jpg", body: "<p>1971年3月26日，孟加拉国独立战争爆发，东巴基斯坦宣布脱离巴基斯坦独立。经过九个月的激烈战斗和1971年12月著名的「琅格拉布尔大屠杀「（巴基斯坦军队对平民的大规模暴行），孟加拉国终于在1972年正式独立。</p>\n<p>这一天对于孟加拉国人民而言，是用鲜血换来的民族重生。独立运动领袖 <strong>谢赫·穆吉布·拉赫曼</strong> 曾在狱中写下著名的独立宣言，被后人尊称为「孟加拉国之父「。</p>\n<p>如今，每年的3月26日，整个孟加拉国都会举行盛大的阅兵和庆祝活动。值得一提的是，孟加拉国的国旗——红绿相间中间一轮跃升的太阳——太阳象征着国家的重生与希望，正是对这一天最好的纪念。</p>\n" },
+  
+  { date: "2026-03-27", title: "世界戏剧日", subtitle: "面具背后的古老艺术", image: "../../images/2026-03/2026-03-27.jpg", body: "<p>1962年，每年的3月27日被定为 <strong>世界戏剧日</strong>（World Theatre Day）。选择这一天，是因为1962年的这一天是「巴黎国际戏剧节「创办的日子。</p>\n<p>世界戏剧日的设立旨在让全世界关注戏剧艺术对人类文明的重要意义。每年的这一天，国际戏剧协会都会邀请一位知名人士撰写《世界戏剧日致词》，分享对戏剧的思考与情感。</p>\n<p>你可能不知道的是，戏剧是世界上现存最古老的艺术形式之一。早在公元前5世纪，古希腊戏剧就已经相当成熟——阿里斯托芬和欧里庇得斯的作品至今仍在世界各地上演。而中国戏曲同样历史悠久，可以追溯到12世纪的宋元时期。戏剧不只是娱乐，它是人类用仪式和故事认识自我的最古老方式之一。</p>\n" },
+  
+  { date: "2026-03-28", title: "计算机里的闰年 bug", subtitle: "一行代码引发的金融风暴", image: "../../images/2026-03/2026-03-28.jpg", body: "<p>2015年3月28日，数千名美国公民的退税没有按时到账。原因是： <strong>美国国税局（IRS）</strong> 的计算机系统在处理2015年3月31日的交易时崩溃了——这不是恐怖袭击，而是一个<strong>日期计算 bug</strong>。</p>\n<p>原来，IRS的某些系统将2015年3月31日错误地标记为「3月32日「，这是因为某些遗留代码在处理每个月最后一天时存在逻辑错误。这些系统是在1960年代编写的，其中一段代码将每月31号的序号硬编码为「31「，但3月的最后一天在某些闰年计算逻辑中被跳过，导致了日期错乱。</p>\n<p>讽刺的是，修复这个bug并不复杂，但IRS的IT系统有超过<strong>6000万行COBOL代码</strong>，没有完整文档，任何改动都可能引发连锁反应。这就是为什么在2020年代，许多金融机构和政府部门仍在运行着几十年前的「古老「系统。</p>\n" },
+  
+  { date: "2026-03-29", title: "尼泊尔8.1级大地震", subtitle: "2015年喜马拉雅地区的毁灭性灾难", image: "../../images/2026-03/2026-03-29.jpg", body: "<p>2015年4月25日，尼泊尔发生 <strong>8.1级大地震</strong>，震中位于加德满都西北方向约77公里处。这是尼泊尔81年来遭遇的最强烈地震。</p>\n<p>地震造成约 <strong>9000人死亡</strong>，超过 <strong>20000人受伤</strong>，100多万栋房屋被毁。加德满都城内的多座世界文化遗产——包括著名的 <strong>比姆森塔</strong>（杜巴广场地标）——在地震中完全坍塌。</p>\n<p>这场地震的成因是：印度板块以每年约4.5厘米的速度向北挤压欧亚板块，喜马拉雅地区正好处于两大板块的交界处。这种挤压积累了巨大的应力，最终以地震的形式释放出来。</p>\n<p>震后，全世界伸出援手，中国救援队是首批抵达的国际救援力量之一。地震也暴露了尼泊尔建筑质量低下、抗震能力不足的严峻问题，促使该国启动了大规模的基础设施抗震加固工程。</p>\n" },
+  
+  { date: "2026-03-30", title: "梵高的《星夜》是在精神病院创作的", subtitle: "艺术史上最著名的窗景", image: "../../images/2026-03/2026-03-30.jpg", body: "<p>1889年，荷兰画家文森特·梵高在法国圣雷米精神病院（Saint-Paul-de-Mausole）疗养期间，创作了举世闻名的《星夜》（The Starry Night）。那扇他凝视的窗户窗外，正是普罗旺斯的夜空。</p>\n<p>当时梵高割伤了自己的耳朵，精神状态极不稳定。他的医生——让-保罗·雷伊哈辛——允许他在病情允许时作画。正是在这间小小的病房里，梵高用激进的笔触和夸张的色彩，描绘了一幅充满旋涡和动荡的星空。</p>\n<p>有趣的是，梵高对这幅作品并不满意，他曾写信给弟弟提奥说：「今晚的风景画我重新画了一遍，但我觉得还是在糟蹋自己。「然而，这幅「糟蹋「的作品如今价值超过 <strong>1亿美元</strong>，被纽约现代艺术博物馆永久收藏，成为后印象派的标志性符号。</p>\n" },
+  
+  { date: "2026-03-31", title: "拿破仑的「别为我哭泣「", subtitle: "消失的蜡封与被篡改的历史", image: "../../images/2026-03/2026-03-31.jpg", body: "<p>1821年3月31日，一则令欧洲震惊的消息从南大西洋传来——拿破仑·波拿巴在流放地 <strong>圣赫勒拿岛</strong> 去世。这位曾让整个欧洲颤抖的皇帝，在流亡六年后终于落幕。</p>\n<p>拿破仑死后的验尸报告声称他死于胃癌，但围绕他死因的阴谋论从未停止。有人认为他是被砒霜慢性毒杀——圣赫勒拿岛的英国狱卒威廉·克鲁克香克用砒霜毒死了他。英国人怀疑拿破仑可能某天会被救走并重返法国，因此先下手为强。</p>\n<p>现代法医分析拿破仑头发中的微量元素时，确实发现了异常高的砒霜含量。但学术界至今仍在争论：这些砒霜是投毒证据，还是当时环境（壁纸含砒霜）造成的背景值？拿破仑的真正死因，或许永远是一个谜。</p>\n" },
+  
+  { date: "2026-04-01", title: "愚人节的身世之谜", subtitle: "从「新年献礼「到「整蛊节日「", image: "../../images/2026-04/2026-04-01.jpg", body: "<p>每年的4月1日，全世界有数以亿计的人被朋友、同事、甚至媒体捉弄。但你有没有想过，这个「光明正大骗人「的节日究竟从何而来？</p>\n<p>最有力的解释与 <strong>1582年的历法改革</strong>有关。当年罗马教皇格里高利十三世宣布废除儒略历，启用新的格里历（公历）。法国政府要求国民在4月1日之前完成新年庆祝，但许多人不知情或拒绝改变，继续在4月1日庆祝新年。政府于是大摆「愚人宴「，邀请这些守旧派参加，公开嘲弄他们。久而久之，4月1日就变成了一个以愚弄他人为乐的日子。</p>\n<p>另一个说法来自古罗马的「嬉乐节「（Hilaria），每年3月25日希腊人也过「玩笑节「。但学界更公认的是历法改革说——法国人当年被嘲笑的对象，最终变成了愚人节的主角。</p>\n<p>有趣的是，在法语中愚人节叫 <strong>「Poisson d'avril「</strong>（四月鱼），至今法国人仍保留着往朋友背后贴纸鱼的习俗。没有人确切知道「鱼「的来历——或许是因为鱼在春天活跃，或许只是一个被沿袭下来的神秘符号。</p>\n" },
+  
+  { date: "2026-04-02", title: "安徒生与《丑小鸭》身后的真实故事", subtitle: "一个关于天鹅的美丽误会", image: "../../images/2026-04/2026-04-02.jpg", body: "<p>200年前的4月2日，丹麦童话大师 <strong>汉斯·克里斯蒂安·安徒生</strong> 出生。他一生创作了160多篇童话，《丑小鸭》是他最著名的作品之一——讲述一只被误认为丑小鸭的天鹅，最终发现自己其实是美丽的天鹅。</p>\n<p>有趣的是，这个童话背后藏着一个真实的科学误会。</p>\n<p>1748年，生物学家马蒂亚斯·斯洛安·布伦德尔记录了天鹅的杂交现象。他发现某些鸭子孵化天鹅蛋后，幼崽呈现出与正常天鹅截然不同的深色羽毛——这被当作「丑小鸭「故事的素材。但实际上，<strong>天鹅并不会孵化鸭蛋</strong>。这并非安徒生的创作来源，而是后人将科学记录与文学作品混淆了。</p>\n<p>更令人意外的是，安徒生本人从未上过正规学校，童年时期饱尝贫困和孤独。他的童话看似写给儿童，实则充满了对社会的讽刺和对人性的深刻洞察——比如《皇帝的新装》讽刺虚荣，《卖火柴的小女孩》控诉社会不公。1905年4月2日，安徒生去世，丹麦为他降半旗致哀。</p>\n" }
+  
+];
+
+let currentIndex = 0;
+const today = new Date().toISOString().split('T')[0];
+
+function formatDate(dateStr) {
+  const [y,m,d] = dateStr.split('-');
+  const wd = ['周日','周一','周二','周三','周四','周五','周六'][new Date(y,m-1,d).getDay()];
+  return `${y}年${parseInt(m)}月${parseInt(d)}日 ${wd}`;
+}
+
+function isFuture(dateStr) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  return new Date(dateStr) > t;
+}
+
+function renderCuriosity(index) {
+  const c = curiositiesDB[index];
+  document.getElementById('card-img').src = c.image;
+  document.getElementById('card-img').alt = c.title;
+  document.getElementById('date').innerHTML = formatDate(c.date) + (c.date === today ? '<span class="today-badge">今日</span>' : '');
+  document.getElementById('title').textContent = c.title;
+  document.getElementById('subtitle').textContent = c.subtitle;
+  document.getElementById('body-text').innerHTML = c.body;
+  document.getElementById('prev-btn').classList.toggle('disabled', index === 0 || isFuture(curiositiesDB[index-1]?.date));
+  document.getElementById('next-btn').classList.toggle('disabled', index === curiositiesDB.length-1 || isFuture(curiositiesDB[index+1]?.date));
+  history.replaceState({}, '', '?date=' + c.date);
+}
+
+function goToPrev() {
+  if (currentIndex > 0 && !isFuture(curiositiesDB[currentIndex-1]?.date)) {
+    currentIndex--; renderCuriosity(currentIndex);
+  }
+}
+function goToNext() {
+  if (currentIndex < curiositiesDB.length-1 && !isFuture(curiositiesDB[currentIndex+1]?.date)) {
+    currentIndex++; renderCuriosity(currentIndex);
+  }
+}
+function shuffleCuriosity() {
+  const valid = curiositiesDB.filter(c => !isFuture(c.date));
+  let n; do { n = Math.floor(Math.random() * valid.length); } while (valid[n].date === curiositiesDB[currentIndex].date);
+  currentIndex = curiositiesDB.indexOf(valid[n]); renderCuriosity(currentIndex);
+}
+
+(function() {
+  const urlDate = new URLSearchParams(location.search).get('date');
+  const todayIdx = curiositiesDB.findIndex(c => c.date === today);
+  if (urlDate) {
+    const idx = curiositiesDB.findIndex(c => c.date === urlDate);
+    currentIndex = idx >= 0 ? idx : (todayIdx >= 0 ? todayIdx : curiositiesDB.length - 1);
+  } else {
+    currentIndex = todayIdx >= 0 ? todayIdx : curiositiesDB.length - 1;
+  }
+  renderCuriosity(currentIndex);
+})();
+</script>
+
+  </div>
+</body>
+</html>

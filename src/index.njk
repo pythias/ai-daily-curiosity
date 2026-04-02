@@ -1,0 +1,92 @@
+---
+layout: base.njk
+permalink: /
+---
+{% set allCurios = collections.curiosity | allCuriosities %}
+
+<div class="card">
+  <img id="card-img" class="card-img" src="{{ allCurios[0].image }}" alt="今日好奇">
+  <div class="content">
+    <div id="date" class="date"></div>
+    <div class="divider">
+      <span class="divider-line"></span>
+      <span class="divider-dot"></span>
+      <span class="divider-line"></span>
+    </div>
+    <h1 id="title" class="title"></h1>
+    <div id="subtitle" class="subtitle"></div>
+    <div id="body-text" class="body-text"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="nav">
+    <a id="prev-btn" class="nav-btn" href="#" onclick="goToPrev(); return false;">← 前一天</a>
+    <a id="next-btn" class="nav-btn" href="#" onclick="goToNext(); return false;">后一天 →</a>
+  </div>
+  <button class="shuffle-btn" onclick="shuffleCuriosity()"><span>↻</span> 换一换</button>
+  <div class="credit">每日更新 · 让知识成为一种习惯</div>
+</div>
+
+<script>
+const curiositiesDB = [
+  {% for item in allCurios %}
+  { date: "{{ item.date }}", title: {{ item.title | dump | safe }}, subtitle: {{ item.subtitle | dump | safe }}, image: "{{ item.image }}", body: {{ item.body | dump | safe }} }{% if not loop.last %},{% endif %}
+  {% endfor %}
+];
+
+let currentIndex = 0;
+const today = new Date().toISOString().split('T')[0];
+
+function formatDate(dateStr) {
+  const [y,m,d] = dateStr.split('-');
+  const wd = ['周日','周一','周二','周三','周四','周五','周六'][new Date(y,m-1,d).getDay()];
+  return `${y}年${parseInt(m)}月${parseInt(d)}日 ${wd}`;
+}
+
+function isFuture(dateStr) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  return new Date(dateStr) > t;
+}
+
+function renderCuriosity(index) {
+  const c = curiositiesDB[index];
+  document.getElementById('card-img').src = c.image;
+  document.getElementById('card-img').alt = c.title;
+  document.getElementById('date').innerHTML = formatDate(c.date) + (c.date === today ? '<span class="today-badge">今日</span>' : '');
+  document.getElementById('title').textContent = c.title;
+  document.getElementById('subtitle').textContent = c.subtitle;
+  document.getElementById('body-text').innerHTML = c.body;
+  document.getElementById('prev-btn').classList.toggle('disabled', index === 0 || isFuture(curiositiesDB[index-1]?.date));
+  document.getElementById('next-btn').classList.toggle('disabled', index === curiositiesDB.length-1 || isFuture(curiositiesDB[index+1]?.date));
+  history.replaceState({}, '', '?date=' + c.date);
+}
+
+function goToPrev() {
+  if (currentIndex > 0 && !isFuture(curiositiesDB[currentIndex-1]?.date)) {
+    currentIndex--; renderCuriosity(currentIndex);
+  }
+}
+function goToNext() {
+  if (currentIndex < curiositiesDB.length-1 && !isFuture(curiositiesDB[currentIndex+1]?.date)) {
+    currentIndex++; renderCuriosity(currentIndex);
+  }
+}
+function shuffleCuriosity() {
+  const valid = curiositiesDB.filter(c => !isFuture(c.date));
+  let n; do { n = Math.floor(Math.random() * valid.length); } while (valid[n].date === curiositiesDB[currentIndex].date);
+  currentIndex = curiositiesDB.indexOf(valid[n]); renderCuriosity(currentIndex);
+}
+
+(function() {
+  const urlDate = new URLSearchParams(location.search).get('date');
+  const todayIdx = curiositiesDB.findIndex(c => c.date === today);
+  if (urlDate) {
+    const idx = curiositiesDB.findIndex(c => c.date === urlDate);
+    currentIndex = idx >= 0 ? idx : (todayIdx >= 0 ? todayIdx : curiositiesDB.length - 1);
+  } else {
+    currentIndex = todayIdx >= 0 ? todayIdx : curiositiesDB.length - 1;
+  }
+  renderCuriosity(currentIndex);
+})();
+</script>

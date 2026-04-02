@@ -1,0 +1,14 @@
+{
+  "name": "daily-curiosity-11ty",
+  "version": "1.0.0",
+  "description": "每天一个小好奇 - 静态生成版",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0"
+  }
+}
