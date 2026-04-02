@@ -6,20 +6,26 @@
   <title>{% if title %}{{ title }} - {% endif %}每天一个小好奇</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg: #FAFAF8;
-      --text-primary: #1A1A1A;
-      --text-secondary: #6B6B6B;
-      --accent: #E85D4C;
+      --bg: #FBF7F4;
       --card-bg: #FFFFFF;
-      --border: #EEEEEE;
+      --text-primary: #2D2A26;
+      --text-secondary: #8C8680;
+      --accent: #E07B54;
+      --accent-light: #FDF0EA;
+      --border: #F0EBE6;
+      --shadow-color: rgba(45, 42, 38, 0.08);
+      --shadow-deep: rgba(45, 42, 38, 0.15);
     }
     body {
       font-family: 'Noto Serif SC', serif;
       background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(224, 123, 84, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(224, 123, 84, 0.04) 0%, transparent 50%);
       color: var(--text-primary);
       line-height: 1.9;
       min-height: 100vh;
@@ -31,28 +37,55 @@
     .logo {
       font-family: 'Inter', sans-serif;
       font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 3px;
+      font-weight: 600;
+      letter-spacing: 4px;
       color: var(--text-secondary);
       text-transform: uppercase;
-      margin-top: 48px;
-      margin-bottom: 48px;
+      margin-top: 40px;
+      margin-bottom: 32px;
     }
-    .container { max-width: 720px; width: 100%; }
+    .container { max-width: 680px; width: 100%; }
+
+    /* Claymorphism Card */
     .card {
       background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.04), 0 1px 4px rgba(0,0,0,0.02);
+      border-radius: 24px;
+      box-shadow:
+        0 4px 24px var(--shadow-color),
+        0 12px 48px var(--shadow-color),
+        inset 0 1px 0 rgba(255,255,255,0.8);
       overflow: hidden;
+      transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 300ms ease;
     }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 8px 32px var(--shadow-color),
+        0 20px 60px var(--shadow-deep),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+    .card.fade-out {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.98);
+      transition: all 250ms ease;
+    }
+    .card.fade-in {
+      animation: cardEnter 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .card-img {
       width: 100%;
       aspect-ratio: 16 / 10;
       object-fit: cover;
       display: block;
     }
-    .content { padding: 48px; }
-    @media (max-width: 600px) { .content { padding: 28px 24px; } }
+    .content { padding: 40px 48px 44px; }
+    @media (max-width: 600px) { .content { padding: 28px 24px 32px; } }
+
     .date {
       font-family: 'Inter', sans-serif;
       font-size: 12px;
@@ -61,120 +94,169 @@
       color: var(--text-secondary);
       text-transform: uppercase;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .date::before,
+    .date::after {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--border);
+    }
+    .today-badge {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: white;
+      background: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+      vertical-align: middle;
+      box-shadow: 0 2px 8px rgba(224, 123, 84, 0.35);
     }
     .divider {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      margin-bottom: 28px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
-    .divider-line { width: 48px; height: 1px; background: var(--border); }
-    .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .divider-line { width: 36px; height: 1.5px; background: var(--border); border-radius: 2px; }
+    .divider-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
     .title {
       font-family: 'Playfair Display', serif;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
     }
-    @media (max-width: 600px) { .title { font-size: 22px; } }
+    @media (max-width: 600px) { .title { font-size: 21px; } }
     .subtitle {
       font-family: 'Inter', sans-serif;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--accent);
       text-align: center;
       margin-bottom: 28px;
+      opacity: 0.85;
     }
     .body-text {
-      font-size: 17px;
+      font-size: 16.5px;
       text-align: justify;
+      color: var(--text-primary);
     }
-    .body-text p { margin-bottom: 20px; }
+    .body-text p { margin-bottom: 18px; }
     .body-text p:last-child { margin-bottom: 0; }
     .body-text strong, .body-text b { color: var(--accent); font-weight: 600; }
-    .body-text ul, .body-text ol { margin: 16px 0; padding-left: 24px; }
-    .body-text li { margin-bottom: 8px; }
+    .body-text ul, .body-text ol { margin: 14px 0; padding-left: 22px; }
+    .body-text li { margin-bottom: 6px; }
     .body-text a { color: var(--accent); text-decoration: underline; }
+
     .footer {
-      margin-top: 48px;
-      margin-bottom: 64px;
+      margin-top: 36px;
+      margin-bottom: 56px;
       text-align: center;
     }
     .nav {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 24px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
     .nav-btn {
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       color: var(--text-secondary);
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 12px 24px;
-      border-radius: 8px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 50px;
       cursor: pointer;
       transition: all 200ms ease;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       text-decoration: none;
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
     .nav-btn:hover:not(.disabled) {
       background: var(--text-primary);
       color: var(--bg);
       border-color: var(--text-primary);
+      box-shadow: 0 4px 16px var(--shadow-deep);
+      transform: translateY(-1px);
     }
-    .nav-btn.disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn.disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+
     .shuffle-btn {
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      letter-spacing: 1px;
-      color: var(--text-secondary);
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 14px 32px;
-      border-radius: 8px;
+      letter-spacing: 0.5px;
+      color: var(--card-bg);
+      background: var(--accent);
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
       cursor: pointer;
       transition: all 200ms ease;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 20px;
+      box-shadow: 0 4px 16px rgba(224, 123, 84, 0.35);
     }
     .shuffle-btn:hover {
-      background: var(--text-primary);
-      color: var(--bg);
-      border-color: var(--text-primary);
+      background: #c96a47;
+      box-shadow: 0 6px 24px rgba(224, 123, 84, 0.45);
+      transform: translateY(-2px);
     }
-    .today-badge {
+    .shuffle-btn:active { transform: translateY(0) scale(0.97); }
+
+    .kbd-hint {
       font-family: 'Inter', sans-serif;
       font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: white;
-      background: var(--accent);
-      padding: 4px 8px;
+      color: #C8C4C0;
+      margin-top: 12px;
+      letter-spacing: 0.5px;
+    }
+    .kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      background: var(--border);
       border-radius: 4px;
-      margin-left: 8px;
-      vertical-align: middle;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 0 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
     }
     .credit {
       font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      color: #C0C0C0;
-      margin-top: 24px;
+      font-size: 10px;
+      color: #C8C4C0;
+      margin-top: 20px;
       letter-spacing: 0.5px;
     }
-    .fade-out { opacity: 0; transform: translateY(-10px); transition: all 300ms ease; }
+    /* Keyboard focus styles */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
