@@ -1,4 +1,24 @@
-.DS_Store
+# Dependencies
 node_modules/
+
+# Build output
 _site/
-*.log
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+MEMORY.md
+memory/
+skills/
