@@ -34,17 +34,7 @@
       align-items: center;
       padding: 0 24px;
     }
-    .logo {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 4px;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      margin-top: 40px;
-      margin-bottom: 32px;
-    }
-    .container { max-width: 680px; width: 100%; }
+    .container { max-width: 740px; width: 100%; }
 
     /* Claymorphism Card */
     .card {
@@ -78,13 +68,22 @@
     }
 
     .card-img {
-      width: 100%;
-      aspect-ratio: 16 / 10;
+      width: 260px;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
+      border-radius: 16px;
+      flex-shrink: 0;
+      float: left;
+      margin-right: 32px;
+      margin-bottom: 8px;
     }
-    .content { padding: 40px 48px 44px; }
-    @media (max-width: 600px) { .content { padding: 28px 24px 32px; } }
+    .content { padding: 32px 40px 36px; overflow: hidden; }
+    .content::after { content: ''; display: table; clear: both; }
+    @media (max-width: 600px) {
+      .card-img { width: 100%; float: none; margin: 0 0 20px 0; border-radius: 12px; }
+      .content { padding: 24px 20px 28px; }
+    }
 
     .date {
       font-family: 'Inter', sans-serif;
@@ -153,11 +152,12 @@
       opacity: 0.85;
     }
     .body-text {
-      font-size: 16.5px;
+      font-size: 15px;
+      line-height: 1.7;
       text-align: justify;
       color: var(--text-primary);
     }
-    .body-text p { margin-bottom: 18px; }
+    .body-text p { margin-bottom: 12px; }
     .body-text p:last-child { margin-bottom: 0; }
     .body-text strong, .body-text b { color: var(--accent); font-weight: 600; }
     .body-text ul, .body-text ol { margin: 14px 0; padding-left: 22px; }
@@ -260,7 +260,6 @@
   </style>
 </head>
 <body>
-  <div class="logo">好奇</div>
   <div class="container">
     {{ content | safe }}
   </div>
