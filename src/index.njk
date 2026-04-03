@@ -39,6 +39,7 @@ const curiositiesDB = [
 ];
 
 let currentIndex = 0;
+let isAnimating = false;
 const today = new Date().toISOString().split('T')[0];
 
 function formatDate(dateStr) {
@@ -64,16 +65,30 @@ function renderCuriosity(index, animate = false) {
   const card = document.getElementById('card');
 
   if (animate) {
+    // Clean up any leftover animation classes
+    card.classList.remove('fade-out', 'fade-in');
     card.classList.add('fade-out');
-    card.addEventListener('transitionend', function handler() {
-      card.removeEventListener('transitionend', handler);
+
+    let fired = false;
+    isAnimating = true;
+    function finish() {
+      if (fired) return;
+      fired = true;
+      isAnimating = false;
+      card.removeEventListener('transitionend', finish);
+      clearTimeout(timer);
       applyContent(c);
       card.classList.remove('fade-out');
       card.classList.add('fade-in');
       updateNav();
       history.replaceState({}, '', '?date=' + c.date);
-    });
+    }
+
+    card.addEventListener('transitionend', finish);
+    // Fallback: if transitionend doesn't fire (browser optimization etc.)
+    const timer = setTimeout(finish, 350);
   } else {
+    card.classList.remove('fade-out', 'fade-in');
     applyContent(c);
     updateNav();
     history.replaceState({}, '', '?date=' + c.date);
@@ -91,6 +106,7 @@ function applyContent(c) {
 }
 
 function goToPrev() {
+  if (isAnimating) return;
   if (currentIndex > 0 && !isFuture(curiositiesDB[currentIndex-1]?.date)) {
     currentIndex--;
     renderCuriosity(currentIndex, true);
@@ -98,6 +114,7 @@ function goToPrev() {
 }
 
 function goToNext() {
+  if (isAnimating) return;
   if (currentIndex < curiositiesDB.length-1 && !isFuture(curiositiesDB[currentIndex+1]?.date)) {
     currentIndex++;
     renderCuriosity(currentIndex, true);
@@ -105,6 +122,7 @@ function goToNext() {
 }
 
 function shuffleCuriosity() {
+  if (isAnimating) return;
   const valid = curiositiesDB.filter(c => !isFuture(c.date));
   let n;
   do { n = Math.floor(Math.random() * valid.length); }
