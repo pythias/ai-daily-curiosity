@@ -235,6 +235,10 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: opacity 220ms ease;
+    }
+    .card-img.is-loading {
+      opacity: 0;
     }
 
     .card-inner {
@@ -331,7 +335,7 @@
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
     }
-    .nav-btns { display: flex; gap: 8px; }
+    .nav-btns { display: flex; flex-wrap: wrap; gap: 8px; }
     .nav-btn {
       font-family: var(--font-sans);
       font-size: 13px;
@@ -547,6 +551,9 @@
         grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
+      #today-btn:not([hidden]) {
+        grid-column: 1 / -1;
+      }
       .nav-btn {
         min-height: 48px;
         padding: 12px 12px;
@@ -592,7 +599,7 @@
       </aside>
 
       <main class="content-panel" id="content-panel">
-        <article class="curiosity-card" id="curiosity-card">
+        <article class="curiosity-card" id="curiosity-card" tabindex="-1">
           <figure class="card-media" id="card-media">
             <img id="card-img" class="card-img" src="" alt="" width="1200" height="675" loading="lazy" decoding="async" />
           </figure>
@@ -615,6 +622,7 @@
           <div class="nav-btns">
             <button type="button" class="nav-btn" id="prev-btn" onclick="goToPrev()" aria-label="前一天">← 前一天</button>
             <button type="button" class="nav-btn" id="next-btn" onclick="goToNext()" aria-label="后一天">后一天 →</button>
+            <button type="button" class="nav-btn" id="today-btn" onclick="goToToday()" aria-label="回到今天" hidden>今天</button>
           </div>
           <div class="kbd-hint">
             <span class="kbd">←</span><span class="kbd">→</span> 切换日期 &nbsp; <span class="kbd">Space</span> 随机
@@ -652,16 +660,42 @@
   function setCardImage(c) {
     const media = document.getElementById('card-media');
     const img = document.getElementById('card-img');
+    img.onload = null;
+    img.onerror = null;
     if (!c.image || String(c.image).trim() === '') {
       media.hidden = true;
       img.removeAttribute('src');
+      img.classList.remove('is-loading');
       return;
     }
     media.hidden = false;
     img.alt = c.title || '好奇配图';
-    img.onload = function() { media.hidden = false; };
-    img.onerror = function() { media.hidden = true; };
+    img.classList.add('is-loading');
+    function onLoaded() {
+      img.classList.remove('is-loading');
+      media.hidden = false;
+    }
+    img.onload = onLoaded;
+    img.onerror = function() {
+      img.classList.remove('is-loading');
+      media.hidden = true;
+    };
     img.src = c.image;
+    if (img.complete && img.naturalWidth) onLoaded();
+  }
+
+  function focusContentCard() {
+    const card = document.getElementById('curiosity-card');
+    if (card) card.focus({ preventScroll: false });
+  }
+
+  function todayIndex() {
+    return curiositiesDB.findIndex(c => c.date === today && !isFuture(c.date));
+  }
+
+  function goToToday() {
+    const idx = todayIndex();
+    if (idx >= 0) goTo(idx, true);
   }
 
   function buildDateList() {
@@ -702,8 +736,8 @@
         card.classList.remove('fade-out');
         card.classList.add('fade-in');
         isAnimating = false;
-        updateActive();
         history.replaceState({}, '', '?date=' + curiositiesDB[currentIndex].date);
+        focusContentCard();
       }, 200);
     } else {
       applyContent(curiositiesDB[currentIndex]);
@@ -742,6 +776,10 @@
       prev < 0 || isFuture(curiositiesDB[prev]?.date));
     document.getElementById('next-btn').classList.toggle('disabled',
       next >= curiositiesDB.length || isFuture(curiositiesDB[next]?.date));
+    const tIdx = todayIndex();
+    const todayBtn = document.getElementById('today-btn');
+    const showToday = tIdx >= 0 && currentIndex !== tIdx;
+    todayBtn.hidden = !showToday;
   }
 
   function goToPrev() {
