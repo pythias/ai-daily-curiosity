@@ -109,28 +109,39 @@ image: ../../images/2026-01/2026-01-15.jpg
 
 ---
 
-## 图片生成指南（暂停中，仅供日后补图参考）
+## 图片生成指南
 
-以下流程**当前不执行**；恢复生成图片时再启用。
+### 核心要求
+- **禁止文字**：图片中不得包含任何文字（包括英文、中文、数字、符号）
+- **手绘插画风格**：优先使用手绘/儿童绘本风格，线条清晰、色彩明快、有亲和力
+- **图文一致**：图片内容必须与正文主题高度匹配，能直观传达知识点
 
-### 信息图 Prompt 模板
+### Prompt 撰写规范
 ```markdown
-[简洁英文描述画面的主体内容，风格为简约科普插画，有视觉中心，避免文字]
-
-例如：
-- 光谱分散：白色的光通过三棱镜分散成七色彩虹，简洁科学插画风格
-- 蓝色天空：仰望晴朗天空，蓝渐变到白的纯净画面，儿童科普风格
-- DNA双螺旋：微观世界的旋转楼梯，蓝色紫色为主，科学又梦幻
+[简洁英文描述画面内容], children's hand-drawn illustration style, cute and friendly, no text, no letters, no numbers, no symbols, clean lines, vibrant colors, educational science drawing
 ```
 
-### 图片要求
-- 风格：简约科普插画，儿童友好
-- 比例：16:10 或 1:1
-- 不要文字（图片中不要有文字）
-- 颜色明快但不刺眼
+**常见错误要避免：**
+- ❌ `with labels` / `with text` / `annotated`
+- ❌ `realistic photo` / `3D render` / `photorealistic`
+- ❌ `字` / `文字` / `letter` / `word` 出现在 prompt 任何位置
 
-### 生成方式
-- **单篇 / 交互**：使用 `image_generate`（或等价能力）生成后保存到 `src/images/YYYY-MM/YYYY-MM-DD.jpg`。
+### 示例对比
+
+| 主题 | ❌ 错误示例 | ✅ 正确示例 |
+|------|-----------|-----------|
+| 彩虹原理 | rainbow with color labels labeled red orange yellow | cute children book style rainbow with fluffy clouds, hand-drawn illustration, no text |
+| DNA双螺旋 | DNA helix with A T G C letters | adorable DNA double helix as a colorful twisted ladder in microscopic world, soft pastel colors, children's science book style |
+
+### 图片要求
+- 比例：16:10 或 1:1
+- 风格：手绘科普插画，儿童友好
+- 颜色：明快但不刺眼
+- 内容：与正文知识点直接相关，有视觉中心
+
+### 生成与保存
+- 使用 `image_generate` 生成后保存到 `src/images/YYYY-MM/YYYY-MM-DD.jpg`
+- frontmatter 里 image 路径规范为 `../../images/YYYY-MM/YYYY-MM-DD.jpg`
 
 ---
 
@@ -148,9 +159,13 @@ image: ../../images/2026-01/2026-01-15.jpg
 
 ---
 
-## 时间线
+## 时间线规则
 
-⚠️ 只能生成今天及以前的日期，不可生成未来内容。
+🚫 **硬性禁止：不得生成今天之后的任何内容**
+- 不生成未来日期的文件
+- 不生成未来日期的图片
+- 每次生成前先确认「今天」是哪一天（参考会话开始时的系统时间）
+- 如果用户要求生成未来日期，必须拒绝并说明原因
 
 ---
 
