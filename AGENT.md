@@ -131,6 +131,7 @@ image: ../../images/2026-01/2026-01-15.jpg
 
 ### 生成方式
 - **单篇 / 交互**：使用 `image_generate`（或等价能力）生成后保存到 `src/images/YYYY-MM/YYYY-MM-DD.jpg`。
+
 ---
 
 ## 生成流程
