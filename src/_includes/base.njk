@@ -625,7 +625,7 @@
             <button type="button" class="nav-btn" id="today-btn" onclick="goToToday()" aria-label="回到今天" hidden>今天</button>
           </div>
           <div class="kbd-hint">
-            <span class="kbd">←</span><span class="kbd">→</span> 切换日期 &nbsp; <span class="kbd">Space</span> 随机
+            <span class="kbd">←</span><span class="kbd">→</span> 切换 &nbsp; <span class="kbd">Space</span> 随机 &nbsp; <span class="kbd">T</span> 今天
           </div>
           <div class="credit">每日更新 · 让知识成为一种习惯</div>
         </div>
@@ -809,6 +809,7 @@
       case 'ArrowLeft': goToPrev(); break;
       case 'ArrowRight': goToNext(); break;
       case ' ': e.preventDefault(); shuffleCuriosity(); break;
+      case 't': case 'T': goToToday(); break;
     }
   });
 
