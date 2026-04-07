@@ -135,7 +135,31 @@
       color: var(--text-muted);
       margin-bottom: 12px;
       padding-left: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
     }
+    .sidebar-today-btn {
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .sidebar-today-btn:hover {
+      background: var(--accent);
+      color: var(--surface);
+    }
+    .sidebar-today-btn[hidden] { display: none; }
     .date-list { display: flex; flex-direction: column; gap: 4px; }
 
     .date-item {
@@ -594,7 +618,10 @@
 
     <div class="main-grid">
       <aside class="sidebar" id="sidebar" aria-label="按日期浏览">
-        <div class="sidebar-head">目录</div>
+        <div class="sidebar-head">
+          <span>目录</span>
+          <button type="button" class="sidebar-today-btn" id="sidebar-today-btn" onclick="goToToday()" aria-label="回到今天" hidden>回到今天</button>
+        </div>
         <div class="date-list" id="date-list"></div>
       </aside>
 
@@ -654,7 +681,9 @@
 
   function isFuture(dateStr) {
     const t = new Date(); t.setHours(0,0,0,0);
-    return new Date(dateStr) > t;
+    // Use local midnight to avoid UTC timezone issues
+    const [y,m,d] = dateStr.split('-');
+    return new Date(y, m-1, d) > t;
   }
 
   function setCardImage(c) {
@@ -778,8 +807,10 @@
       next >= curiositiesDB.length || isFuture(curiositiesDB[next]?.date));
     const tIdx = todayIndex();
     const todayBtn = document.getElementById('today-btn');
+    const sidebarTodayBtn = document.getElementById('sidebar-today-btn');
     const showToday = tIdx >= 0 && currentIndex !== tIdx;
     todayBtn.hidden = !showToday;
+    sidebarTodayBtn.hidden = !showToday;
   }
 
   function goToPrev() {
